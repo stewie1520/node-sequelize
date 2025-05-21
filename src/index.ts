@@ -24,9 +24,6 @@ const app = new Hono();
 app.use('*', requestLogger);
 app.use('*', cors());
 
-// Redirect root to auth page
-app.get('/', (c) => c.redirect('/auth'));
-
 // Mount API routes
 app.route('/api', router);
 
