@@ -1,6 +1,7 @@
-import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database.js";
-import type { User } from "./User.js";
+import { DataTypes, Model, type ModelStatic } from 'sequelize';
+
+import type { User } from './User.js';
+import sequelize from '../config/database.js';
 
 export class Workspace extends Model {
   declare id: string;
@@ -11,10 +12,10 @@ export class Workspace extends Model {
   declare public readonly createdAt: Date;
   declare public readonly updatedAt: Date;
 
-  static initAssociation = (models: any) => {
+  static initAssociation = (models: Record<string, ModelStatic<User>>) => {
     Workspace.belongsTo(models.User, {
-      foreignKey: "authorId",
-      as: "author",
+      foreignKey: 'authorId',
+      as: 'author',
     });
   };
 }
@@ -37,7 +38,7 @@ Workspace.init(
   },
   {
     sequelize,
-    tableName: "workspaces",
+    tableName: 'workspaces',
     paranoid: true,
     updatedAt: true,
     createdAt: true,

@@ -1,11 +1,11 @@
-import User from "../models/User.js";
-import type { LoginInput, RegisterInput } from "../schemas/user.js";
+import User from '../models/User.js';
+import type { LoginInput, RegisterInput } from '../schemas/user.js';
 import {
   ConflictError,
   NotFoundError,
   UnauthorizedError,
-} from "../utils/errors.js";
-import { generateToken } from "../utils/jwt.js";
+} from '../utils/errors.js';
+import { generateToken } from '../utils/jwt.js';
 
 interface LoginResponse {
   user: {
@@ -31,7 +31,7 @@ class UserService {
       },
     });
     if (existingUser) {
-      throw new ConflictError("Email already in use");
+      throw new ConflictError('Email already in use');
     }
 
     // Create new user
@@ -47,13 +47,13 @@ class UserService {
     });
 
     if (!user) {
-      throw new UnauthorizedError("Invalid email or password");
+      throw new UnauthorizedError('Invalid email or password');
     }
 
     // Verify password
     const isPasswordValid = await user.comparePassword(credentials.password);
     if (!isPasswordValid) {
-      throw new UnauthorizedError("Invalid email or password");
+      throw new UnauthorizedError('Invalid email or password');
     }
 
     // Generate JWT token
@@ -75,7 +75,7 @@ class UserService {
   async getUserById(id: string): Promise<User> {
     const user = await User.findByPk(id);
     if (!user) {
-      throw new NotFoundError("User not found");
+      throw new NotFoundError('User not found');
     }
     return user;
   }

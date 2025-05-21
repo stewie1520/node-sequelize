@@ -1,8 +1,8 @@
-import { z } from "zod";
+import { z } from 'zod';
 
 // Param validation for IDs
 export const idParamSchema = z.object({
-  id: z.coerce.number().int().positive("ID must be a positive integer"),
+  id: z.coerce.number().int().positive('ID must be a positive integer'),
 });
 
 // Pagination schema
@@ -13,8 +13,8 @@ export const paginationSchema = z.object({
 
 // Sorting schema
 export const sortSchema = z.object({
-  sort_by: z.string().default("id"),
-  order: z.enum(["asc", "desc"]).default("asc"),
+  sort_by: z.string().default('id'),
+  order: z.enum(['asc', 'desc']).default('asc'),
 });
 
 // Search schema

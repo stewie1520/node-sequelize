@@ -1,6 +1,6 @@
-import type { Context } from "hono";
-import type { ContentfulStatusCode } from "hono/utils/http-status";
-import { ZodError } from "zod";
+import type { Context } from 'hono';
+import type { ContentfulStatusCode } from 'hono/utils/http-status';
+import { ZodError } from 'zod';
 
 /**
  * Helper function to handle Zod validation errors consistently
@@ -15,14 +15,14 @@ const handleZodError = (
   statusCode: ContentfulStatusCode = 400,
 ) => {
   const formattedErrors = error.errors.map((err) => ({
-    path: err.path.join("."),
+    path: err.path.join('.'),
     message: err.message,
   }));
 
   return c.json(
     {
       success: false,
-      message: "Validation error",
+      message: 'Validation error',
       errors: formattedErrors,
     },
     statusCode,
@@ -43,24 +43,24 @@ export const handleControllerError = (c: Context, error: unknown) => {
   // Handle custom app errors
   if (
     error instanceof Error &&
-    "statusCode" in error &&
-    typeof (error as any).statusCode === "number"
+    'statusCode' in error &&
+    typeof (error as { statusCode: number }).statusCode === 'number'
   ) {
     return c.json(
       {
         success: false,
         message: error.message,
       },
-      (error as any).statusCode,
+      (error as { statusCode: ContentfulStatusCode }).statusCode,
     );
   }
 
   // Handle unexpected errors
-  console.error("Unexpected error:", error);
+  console.error('Unexpected error:', error);
   return c.json(
     {
       success: false,
-      message: "Server error",
+      message: 'Server error',
     },
     500,
   );

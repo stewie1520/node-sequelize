@@ -1,6 +1,8 @@
-import bcrypt from "bcrypt";
-import { DataTypes, Model } from "sequelize";
-import sequelize from "../config/database.js";
+import bcrypt from 'bcrypt';
+import { DataTypes, Model, type ModelStatic } from 'sequelize';
+
+import sequelize from '../config/database.js';
+import type Workspace from './Workspace.js';
 
 export class User extends Model {
   declare public id: string;
@@ -17,10 +19,10 @@ export class User extends Model {
     return await bcrypt.compare(candidatePassword, this.password);
   }
 
-  static initAssociation = (models: any) => {
+  static initAssociation = (models: Record<string, ModelStatic<Workspace>>) => {
     User.hasMany(models.Workspace, {
-      foreignKey: "authorId",
-      as: "author",
+      foreignKey: 'authorId',
+      as: 'author',
     });
   };
 }
@@ -56,7 +58,7 @@ User.init(
   },
   {
     sequelize,
-    tableName: "users",
+    tableName: 'users',
     paranoid: true,
     hooks: {
       beforeCreate: async (user: User) => {
@@ -66,7 +68,7 @@ User.init(
         }
       },
       beforeUpdate: async (user: User) => {
-        if (user.changed("password") && user.password) {
+        if (user.changed('password') && user.password) {
           const salt = await bcrypt.genSalt(10);
           user.password = await bcrypt.hash(user.password, salt);
         }

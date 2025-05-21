@@ -1,5 +1,7 @@
-import jwt from "jsonwebtoken";
-import { config } from "../config/jwt.js";
+import jwt from 'jsonwebtoken';
+
+import { config } from '../config/jwt.js';
+import logger from './logger.js';
 
 export interface TokenPayload {
   id: string;
@@ -16,6 +18,12 @@ export const verifyToken = (token: string): TokenPayload | null => {
   try {
     return jwt.verify(token, config.secret) as TokenPayload;
   } catch (error) {
+    logger.info({
+      message: 'Invalid token',
+      type: 'error',
+      error,
+    });
+
     return null;
   }
 };

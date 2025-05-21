@@ -1,4 +1,5 @@
 import type { Context, Next } from 'hono';
+
 import logger from '../utils/logger.js';
 
 /**

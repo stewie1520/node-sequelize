@@ -1,18 +1,18 @@
-"use strict";
-import bcrypt from "bcrypt";
-import dotenv from "dotenv";
+'use strict';
+import bcrypt from 'bcrypt';
+import dotenv from 'dotenv';
 
 dotenv.config();
 
 export default {
-  up: async (queryInterface, Sequelize) => {
+  up: async (queryInterface) => {
     // Create admin user from environment variables
     const adminEmail = process.env.ADMIN_USER;
     const adminPassword = process.env.ADMIN_PASSWORD;
 
     if (!adminEmail || !adminPassword) {
       console.log(
-        "Skipping admin user creation: Missing environment variables",
+        'Skipping admin user creation: Missing environment variables',
       );
       return;
     }
@@ -23,10 +23,10 @@ export default {
 
     // Insert the admin user
     return queryInterface.bulkInsert(
-      "users",
+      'users',
       [
         {
-          name: "Admin User",
+          name: 'Admin User',
           email: adminEmail,
           password: hashedPassword,
           createdAt: new Date(),
@@ -37,10 +37,10 @@ export default {
     );
   },
 
-  down: async (queryInterface, Sequelize) => {
+  down: async (queryInterface) => {
     // Remove the admin user
     return queryInterface.bulkDelete(
-      "users",
+      'users',
       {
         email: process.env.ADMIN_USER,
       },

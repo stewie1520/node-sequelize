@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 export default {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable("users", {
+    await queryInterface.createTable('users', {
       id: {
         type: Sequelize.DataTypes.UUID,
         primaryKey: true,
@@ -24,12 +24,12 @@ export default {
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       updatedAt: {
         type: Sequelize.DATE,
         allowNull: false,
-        defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+        defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
       },
       deletedAt: {
         type: Sequelize.DATE,
@@ -38,13 +38,13 @@ export default {
     });
 
     // Add index for faster queries
-    await queryInterface.addIndex("users", ["email"], {
+    await queryInterface.addIndex('users', ['email'], {
       unique: true,
-      name: "users_email_idx",
+      name: 'users_email_idx',
     });
   },
 
-  down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable("users");
+  down: async (queryInterface) => {
+    await queryInterface.dropTable('users');
   },
 };

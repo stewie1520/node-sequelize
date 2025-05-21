@@ -1,9 +1,9 @@
-"use strict";
+'use strict';
 
 /** @type {import('sequelize-cli').Migration} */
 export default {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable("workspaces", {
+    await queryInterface.createTable('workspaces', {
       id: {
         type: Sequelize.DataTypes.UUID,
         primaryKey: true,
@@ -16,8 +16,8 @@ export default {
         type: Sequelize.DataTypes.UUID,
         allowNull: false,
         references: {
-          model: "users",
-          key: "id",
+          model: 'users',
+          key: 'id',
         },
       },
       createdAt: {
@@ -31,7 +31,7 @@ export default {
     });
   },
 
-  async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("workspaces");
+  async down(queryInterface) {
+    await queryInterface.dropTable('workspaces');
   },
 };
