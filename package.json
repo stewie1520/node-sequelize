@@ -13,7 +13,8 @@
     "db:seed:all": "sequelize-cli db:seed:all",
     "db:seed:undo": "sequelize-cli db:seed:undo",
     "db:seed:undo:all": "sequelize-cli db:seed:undo:all",
-    "migration:generate": "sequelize-cli migration:generate --name"
+    "migration:generate": "sequelize-cli migration:generate --name",
+    "prepare": "husky"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
@@ -47,8 +48,13 @@
     "eslint": "^9.26.0",
     "eslint-plugin-import": "^2.31.0",
     "globals": "^16.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.0.0",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.32.1"
+  },
+  "lint-staged": {
+    "*": "pnpm lint"
   }
 }

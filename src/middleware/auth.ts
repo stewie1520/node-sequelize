@@ -24,6 +24,7 @@ export const authenticate = createMiddleware<{
 
     // Add user info to the context for use in controllers
     c.set('user', decoded);
+
     await next();
   } catch (error) {
     if (error instanceof UnauthorizedError) {
