@@ -4,24 +4,29 @@ import { cors } from 'hono/cors';
 
 import { app as appConfig } from './config/app.js';
 import { requestLogger } from './middleware/logger.js';
+import { rateLimiter } from './middleware/rateLimiter.js';
 import { sequelize } from './models/index.js';
 import router from './routes/index.js';
 import logger from './utils/logger.js';
 import { handleControllerError } from './utils/validation.js';
+import { RedisService } from './redis/RedisService.js';
 
-// Initialize Sequelize
-const initDatabase = async () => {
+const init = async () => {
   try {
     await sequelize.authenticate();
     logger.info('Database connection has been established successfully.');
+    await RedisService.getInstance().healthCheck();
+    logger.info('Redis connection has been established successfully.');
   } catch (error) {
-    logger.error(`Unable to connect to the database: ${error}`);
+    logger.error(`Unable to connect to the database or redis: ${error}`);
+    process.exit(1);
   }
 };
 
 const app = new Hono();
 
 app.use('*', requestLogger);
+app.use('*', rateLimiter);
 app.use('*', cors());
 
 // Mount API routes
@@ -38,7 +43,7 @@ app.onError((err, c) => {
 });
 
 // Initialize database before starting the server
-initDatabase().then(() => {
+init().then(() => {
   serve(
     {
       fetch: app.fetch,

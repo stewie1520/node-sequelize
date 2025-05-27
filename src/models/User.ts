@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import bcrypt from 'bcryptjs';
 import { DataTypes, Model, type ModelStatic } from 'sequelize';
 
 import sequelize from '../config/database.js';

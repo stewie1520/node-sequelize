@@ -18,3 +18,9 @@ services:
       - listen_addresses=*
       - -c
       - wal_level=logical
+  redis:
+    image: redis:7-alpine
+    ports:
+      - 6379:6379
+    tmpfs:
+      - /data
