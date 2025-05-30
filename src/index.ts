@@ -1,6 +1,7 @@
 import { serve } from '@hono/node-server';
 import { Hono } from 'hono';
 import { cors } from 'hono/cors';
+import { createServer } from 'node:http';
 
 import { app as appConfig } from './config/app.js';
 import { requestLogger } from './middleware/logger.js';
@@ -10,6 +11,8 @@ import router from './routes/index.js';
 import logger from './utils/logger.js';
 import { handleControllerError } from './utils/validation.js';
 import { RedisService } from './redis/RedisService.js';
+import { SocketService, WebSocketManager } from './websocket/index.js';
+import { RealtimeService } from './services/RealtimeService.js';
 
 const init = async () => {
   try {
@@ -44,16 +47,31 @@ app.onError((err, c) => {
 
 // Initialize database before starting the server
 init().then(() => {
-  serve(
-    {
-      fetch: app.fetch,
-      port: appConfig.port,
-    },
-    (info) => {
-      logger.info(`Server is running on http://localhost:${info.port}`);
-      logger.info(
-        `API Documentation available at http://localhost:${info.port}/api`,
-      );
-    },
-  );
+  // Create HTTP server for Socket.IO
+  const server = createServer();
+  
+  // Initialize WebSocket first
+  const socketService = SocketService.getInstance();
+  const io = socketService.initialize(server);
+  const wsManager = new WebSocketManager(io);
+  wsManager.initialize();
+
+  // Setup real-time service
+  const realtimeService = RealtimeService.getInstance();
+  realtimeService.setNotificationHandler(wsManager.getNotificationHandler());
+
+  // Start HTTP server for API using serve from @hono/node-server
+  serve({
+    fetch: app.fetch,
+    port: appConfig.port,
+  }, (info) => {
+    logger.info(`HTTP API Server is running on http://localhost:${info.port}`);
+    logger.info(`API Documentation available at http://localhost:${info.port}/api`);
+  });
+
+  // Start WebSocket server on a different port for clarity
+  const wsPort = appConfig.port + 1;
+  server.listen(wsPort, () => {
+    logger.info(`WebSocket server is running on ws://localhost:${wsPort}`);
+  });
 });

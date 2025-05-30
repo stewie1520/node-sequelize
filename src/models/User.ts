@@ -13,6 +13,8 @@ export class User extends Model {
   declare public readonly createdAt: Date;
   declare public readonly updatedAt: Date;
 
+  declare public getWorkspaces: () => Promise<Workspace[]>;
+
   // Method to compare passwords
   public async comparePassword(candidatePassword: string): Promise<boolean> {
     if (!this.password) return false;

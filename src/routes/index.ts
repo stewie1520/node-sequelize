@@ -2,6 +2,7 @@ import { Hono } from 'hono';
 
 import authRouter from './auth.js';
 import workspaceRouter from './workspace.js';
+import websocketRouter from './websocket.js';
 
 const router = new Hono();
 
@@ -13,5 +14,6 @@ router.get('/', (c) => {
 // Mount routes
 router.route('/auth', authRouter);
 router.route('/workspace', workspaceRouter);
+router.route('/websocket', websocketRouter);
 
 export default router;
