@@ -1,3 +1,5 @@
+[![CI](https://github.com/stewie1520/node-sequelize/actions/workflows/ci.yml/badge.svg)](https://github.com/stewie1520/node-sequelize/actions/workflows/ci.yml)
+
 # Node.js Sequelize Boilerplate
 
 A modern, production-ready boilerplate for Node.js applications using Sequelize ORM, Hono.js, and TypeScript.
@@ -7,10 +9,10 @@ A modern, production-ready boilerplate for Node.js applications using Sequelize 
 - **TypeScript** - Type-safe code development
 - **Hono.js** - Lightweight, ultrafast web framework
 - **Sequelize ORM** - SQL database ORM with migrations support
+- **Redis** - In-memory data store for caching and session management
+- **Socket.IO** - Real-time communication with clients
 - **PostgreSQL** - Robust relational database
 - **Docker** - Containerized development environment
-- **Authentication** - JWT and Google OAuth integration
-- **API Documentation** - Swagger UI integration
 - **Logging** - Winston logger implementation
 - **Code Quality** - ESLint, Husky, and Commitlint setup
 - **Hot Reloading** - Fast development with tsx watch
@@ -92,6 +94,8 @@ This boilerplate uses modern JavaScript/TypeScript libraries and frameworks:
 
 - **[Hono.js](https://hono.dev/)** - Lightweight, ultrafast web framework for the edge
 - **[Sequelize](https://sequelize.org/)** - Promise-based Node.js ORM for PostgreSQL, MySQL, and more
+- **[Socket.IO](https://socket.io/)** - Real-time communication with clients
+- **[Redis](https://redis.io/)** - In-memory data structure store
 - **[TypeScript](https://www.typescriptlang.org/)** - Typed superset of JavaScript
 - **[PostgreSQL](https://www.postgresql.org/)** - Advanced open-source relational database
 - **[Zod](https://zod.dev/)** - TypeScript-first schema validation with static type inference
