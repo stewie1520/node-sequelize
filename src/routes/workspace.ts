@@ -1,9 +1,9 @@
-import { zValidator } from '@hono/zod-validator';
-import { Hono } from 'hono';
+import { zValidator } from "@hono/zod-validator";
+import { Hono } from "hono";
 
-import { authenticate } from '../middleware/auth.js';
-import { createWorkspaceSchema } from '../schemas/workspace.js';
-import UserWorkspaceService from '../services/UserWorkspaceService.js';
+import { authenticate } from "../middleware/auth.js";
+import { createWorkspaceSchema } from "../schemas/workspace.js";
+import UserWorkspaceService from "../services/business/UserWorkspaceService.js";
 
 const workspaceRouter = new Hono();
 
@@ -12,17 +12,25 @@ const workspaceRouter = new Hono();
  * @desc Create new workspace
  * @access Private
  */
-workspaceRouter.post('/', authenticate, zValidator('json', createWorkspaceSchema), async (c) => {
-  const userId = c.get('user').id;
+workspaceRouter.post(
+  "/",
+  authenticate,
+  zValidator("json", createWorkspaceSchema),
+  async (c) => {
+    const userId = c.get("user").id;
 
-  const workspace = await UserWorkspaceService.createWorkspace(userId, c.req.valid('json'));
+    const workspace = await UserWorkspaceService.createWorkspace(
+      userId,
+      c.req.valid("json"),
+    );
 
-  return c.json({
-    success: true,
-    data: {
-      id: workspace.id,
-    },
-  });
-});
+    return c.json({
+      success: true,
+      data: {
+        id: workspace.id,
+      },
+    });
+  },
+);
 
 export default workspaceRouter;

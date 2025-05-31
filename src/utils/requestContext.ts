@@ -1,5 +1,5 @@
-import { AsyncLocalStorage } from 'async_hooks';
-import { randomUUID } from 'crypto';
+import { AsyncLocalStorage } from "async_hooks";
+import { v7 as uuidv7 } from "uuid";
 
 // Define the type for our request context
 export interface RequestContext {
@@ -15,7 +15,7 @@ export const asyncLocalStorage = new AsyncLocalStorage<RequestContext>();
  * @returns A unique request ID
  */
 export const generateRequestId = (): string => {
-  return randomUUID();
+  return uuidv7();
 };
 
 /**

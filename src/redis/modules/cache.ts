@@ -1,6 +1,6 @@
-import { RedisService } from '../RedisService.js';
-import type { CacheOptions } from '../types.js';
-import { logInfo, logError } from '../logger.js';
+import { RedisService } from "../RedisService.js";
+import type { CacheOptions } from "../types.js";
+import { logInfo, logError } from "../logger.js";
 
 export class CacheModule {
   private client = RedisService.getInstance().getClient();
@@ -8,11 +8,16 @@ export class CacheModule {
   /**
    * Set cache value
    */
-  async set(key: string, value: unknown, options?: CacheOptions): Promise<void> {
+  async set(
+    key: string,
+    value: unknown,
+    options?: CacheOptions,
+  ): Promise<void> {
     try {
-      const strValue = typeof value === 'string' ? value : JSON.stringify(value);
+      const strValue =
+        typeof value === "string" ? value : JSON.stringify(value);
       if (options?.ttl) {
-        await this.client.set(key, strValue, 'EX', options.ttl);
+        await this.client.set(key, strValue, "EX", options.ttl);
       } else {
         await this.client.set(key, strValue);
       }
@@ -23,7 +28,7 @@ export class CacheModule {
       }
       logInfo(`Cache set for key: ${key}`);
     } catch (err) {
-      logError('Cache set failed', err);
+      logError("Cache set failed", err);
       throw err;
     }
   }
@@ -41,7 +46,7 @@ export class CacheModule {
         return data as unknown as T;
       }
     } catch (err) {
-      logError('Cache get failed', err);
+      logError("Cache get failed", err);
       throw err;
     }
   }
@@ -54,7 +59,7 @@ export class CacheModule {
       await this.client.del(key);
       logInfo(`Cache deleted for key: ${key}`);
     } catch (err) {
-      logError('Cache del failed', err);
+      logError("Cache del failed", err);
       throw err;
     }
   }
@@ -63,15 +68,21 @@ export class CacheModule {
    * Delete by pattern
    */
   async delByPattern(pattern: string): Promise<number> {
-    let cursor = '0';
+    let cursor = "0";
     let deleted = 0;
     do {
-      const [next, keys] = await this.client.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+      const [next, keys] = await this.client.scan(
+        cursor,
+        "MATCH",
+        pattern,
+        "COUNT",
+        100,
+      );
       cursor = next;
       if (keys.length) {
         deleted += await this.client.del(...keys);
       }
-    } while (cursor !== '0');
+    } while (cursor !== "0");
     logInfo(`Cache deleted by pattern: ${pattern}`);
     return deleted;
   }
@@ -92,10 +103,11 @@ export class CacheModule {
   /**
    * Memoize function result
    */
-  memoize<T extends (...args: unknown[]) => Promise<unknown>>(
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  memoize<T extends (...args: any[]) => Promise<unknown>>(
     fn: T,
     keyGen: (...args: Parameters<T>) => string,
-    options?: CacheOptions
+    options?: CacheOptions,
   ): T {
     return (async (...args: Parameters<T>) => {
       const key = keyGen(...args);
@@ -110,7 +122,11 @@ export class CacheModule {
   /**
    * Cache warming (preload keys)
    */
-  async warm(keys: string[], fetcher: (key: string) => Promise<unknown>, options?: CacheOptions): Promise<void> {
+  async warm(
+    keys: string[],
+    fetcher: (key: string) => Promise<unknown>,
+    options?: CacheOptions,
+  ): Promise<void> {
     for (const key of keys) {
       const exists = await this.client.exists(key);
       if (!exists) {
@@ -118,7 +134,7 @@ export class CacheModule {
         await this.set(key, value, options);
       }
     }
-    logInfo('Cache warming completed');
+    logInfo("Cache warming completed");
   }
 }
 

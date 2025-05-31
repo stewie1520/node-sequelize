@@ -1,8 +1,9 @@
-import bcrypt from 'bcryptjs';
-import { DataTypes, Model, type ModelStatic } from 'sequelize';
+import bcrypt from "bcryptjs";
+import { DataTypes, Model, type ModelStatic } from "sequelize";
 
-import sequelize from '../config/database.js';
-import type Workspace from './Workspace.js';
+import sequelize from "../config/database.js";
+import type Workspace from "./Workspace.js";
+import type { UserRole } from "./UserRole.js";
 
 export class User extends Model {
   declare public id: string;
@@ -14,6 +15,9 @@ export class User extends Model {
   declare public readonly updatedAt: Date;
 
   declare public getWorkspaces: () => Promise<Workspace[]>;
+  declare public getRoles: () => Promise<UserRole[]>;
+
+  declare public addRole: (role: UserRole) => Promise<this>;
 
   // Method to compare passwords
   public async comparePassword(candidatePassword: string): Promise<boolean> {
@@ -21,10 +25,18 @@ export class User extends Model {
     return await bcrypt.compare(candidatePassword, this.password);
   }
 
-  static initAssociation = (models: Record<string, ModelStatic<Workspace>>) => {
+  static initAssociation = (models: {
+    Workspace: ModelStatic<Workspace>;
+    UserRole: ModelStatic<UserRole>;
+  }) => {
     User.hasMany(models.Workspace, {
-      foreignKey: 'authorId',
-      as: 'author',
+      foreignKey: "authorId",
+      as: "author",
+    });
+
+    User.hasMany(models.UserRole, {
+      foreignKey: "userId",
+      as: "roles",
     });
   };
 }
@@ -60,7 +72,7 @@ User.init(
   },
   {
     sequelize,
-    tableName: 'users',
+    tableName: "users",
     paranoid: true,
     hooks: {
       beforeCreate: async (user: User) => {
@@ -70,7 +82,7 @@ User.init(
         }
       },
       beforeUpdate: async (user: User) => {
-        if (user.changed('password') && user.password) {
+        if (user.changed("password") && user.password) {
           const salt = await bcrypt.genSalt(10);
           user.password = await bcrypt.hash(user.password, salt);
         }

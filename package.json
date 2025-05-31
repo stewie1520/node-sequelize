@@ -14,7 +14,8 @@
     "db:seed:undo": "sequelize-cli db:seed:undo",
     "db:seed:undo:all": "sequelize-cli db:seed:undo:all",
     "migration:generate": "sequelize-cli migration:generate --name",
-    "prepare": "husky"
+    "prepare": "husky",
+    "test": "vitest"
   },
   "dependencies": {
     "@hono/node-server": "^1.14.1",
@@ -22,6 +23,7 @@
     "@hono/zod-validator": "^0.5.0",
     "@socket.io/redis-adapter": "^8.3.0",
     "@types/socket.io": "^3.0.2",
+    "@types/uuid": "^10.0.0",
     "bcryptjs": "^3.0.2",
     "debug": "^4.4.1",
     "dotenv": "^16.5.0",
@@ -35,6 +37,7 @@
     "sequelize-cli": "^6.6.3",
     "socket.io": "^4.8.1",
     "socket.io-client": "^4.8.1",
+    "uuid": "^11.1.0",
     "winston": "^3.17.0",
     "zod": "^3.24.4"
   },
@@ -56,10 +59,12 @@
     "eslint-plugin-import": "^2.31.0",
     "globals": "^16.1.0",
     "husky": "^9.1.7",
+    "jest": "^29.7.0",
     "lint-staged": "^16.0.0",
     "tsx": "^4.7.1",
     "typescript": "^5.8.3",
-    "typescript-eslint": "^8.32.1"
+    "typescript-eslint": "^8.32.1",
+    "vitest": "^3.1.4"
   },
   "lint-staged": {
     "*": "pnpm lint"
