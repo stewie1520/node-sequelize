@@ -2,8 +2,8 @@ import path from "path";
 
 import winston from "winston";
 import { getRequestId } from "./requestContext.js";
+import { app as appConfig } from "../config/app.js";
 
-// Define log levels
 const levels = {
   error: 0,
   warn: 1,
@@ -12,10 +12,8 @@ const levels = {
   debug: 4,
 };
 
-// Define log level based on environment
 const level = () => {
-  const env = process.env.NODE_ENV || "development";
-  return env === "development" ? "debug" : "warn";
+  return appConfig.env === "development" ? "debug" : "warn";
 };
 
 // Define colors for each level

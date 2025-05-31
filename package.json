@@ -25,6 +25,7 @@
     "@types/socket.io": "^3.0.2",
     "@types/uuid": "^10.0.0",
     "bcryptjs": "^3.0.2",
+    "cfonts": "^3.3.0",
     "debug": "^4.4.1",
     "dotenv": "^16.5.0",
     "hono": "^4.7.8",

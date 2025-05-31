@@ -2,7 +2,6 @@ import { Hono } from "hono";
 
 import adminRouter from "./admin.js";
 import authRouter from "./auth.js";
-import websocketRouter from "./websocket.js";
 import workspaceRouter from "./workspace.js";
 
 const router = new Hono();
@@ -16,6 +15,5 @@ router.get("/", (c) => {
 router.route("/admin", adminRouter);
 router.route("/auth", authRouter);
 router.route("/workspace", workspaceRouter);
-router.route("/websocket", websocketRouter);
 
 export default router;

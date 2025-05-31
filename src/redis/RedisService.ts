@@ -1,7 +1,7 @@
-import { Redis as RedisClient, type ChainableCommander } from 'ioredis';
-import config from './config.js';
-import { RedisConnectionError } from './errors.js';
-import { logError, logInfo } from './logger.js';
+import { Redis as RedisClient, type ChainableCommander } from "ioredis";
+import { RedisConnectionError } from "./errors.js";
+import { logError, logInfo } from "./logger.js";
+import { config } from "../config/redis.js";
 
 export class RedisService {
   private static instance: RedisService;
@@ -19,12 +19,13 @@ export class RedisService {
         retryStrategy: (times) => Math.min(times * 50, 2000),
         maxRetriesPerRequest: 3,
       });
-      this.client.on('connect', () => logInfo('Redis connected'));
-      this.client.on('error', (err) => logError('Redis error', err));
-      this.client.on('close', () => logInfo('Redis connection closed'));
+
+      this.client.on("connect", () => logInfo("Redis connected"));
+      this.client.on("error", (err) => logError("Redis error", err));
+      this.client.on("close", () => logInfo("Redis connection closed"));
     } catch (err) {
-      logError('Redis connection failed', err);
-      throw new RedisConnectionError('Failed to initialize Redis');
+      logError("Redis connection failed", err);
+      throw new RedisConnectionError("Failed to initialize Redis");
     }
   }
 
@@ -46,9 +47,9 @@ export class RedisService {
   public async healthCheck(): Promise<boolean> {
     try {
       const pong = await this.client.ping();
-      return pong === 'PONG';
+      return pong === "PONG";
     } catch (err) {
-      logError('Redis health check failed', err);
+      logError("Redis health check failed", err);
       return false;
     }
   }
