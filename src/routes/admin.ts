@@ -5,9 +5,7 @@ import { z } from "zod";
 import { authenticate, mustBeAdmin } from "../middleware/auth.js";
 import JwtService from "../services/platform/JwtService.js";
 
-const adminRouter = new Hono();
-
-adminRouter.use(authenticate, mustBeAdmin);
+const adminRouter  = new Hono().use(authenticate, mustBeAdmin);
 
 /**
  * @route GET /admin/users/:userId/tokens
